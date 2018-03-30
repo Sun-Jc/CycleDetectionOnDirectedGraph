@@ -1,7 +1,5 @@
 ## Fast Incremental Cycle Detection On Directed Graph
 
-❎ failed to pass, to be fixed
-
 - cycle_detect.py: 
     - cycle_detection(edges): yields networkx.DiGraph each time when encounter cycle
         - edges: [(source, target),]

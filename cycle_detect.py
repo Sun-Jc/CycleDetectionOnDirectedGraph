@@ -47,8 +47,8 @@ def cycle_detection(edges, baseline=False, progress=True, prob=True):
 
             
     def update(a,b):
-        a_ancestors = [x for x in nx.ancestors(G, a)] + [a] if a not in S else A[a]
-        b_descendants = [x for x in nx.descendants(G, b)] + [b] if b not in S else D[b]
+        a_ancestors = [x for x in nx.ancestors(G, a)] + [a]
+        b_descendants = [x for x in nx.descendants(G, b)] + [b]
         
         for s in b_descendants:
             if s in S:
