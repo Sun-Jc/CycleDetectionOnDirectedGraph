@@ -17,6 +17,9 @@ def cycle_detection(edges, baseline=False, progress=True, prob=True):
         nodes.add(s)
         nodes.add(t)
     N = len(nodes)
+    M = len(set(edges))
+    deg_threshold = 2 * M / N
+
     
     node_id = dict(zip(list(nodes), range(N)))
     id_node = dict([(node_id[nid], nid) for nid in node_id.keys()])
@@ -92,6 +95,7 @@ def cycle_detection(edges, baseline=False, progress=True, prob=True):
                 yield G, (s,t), id_node
                 G.remove_edge(s,t)
     else:
+        dense = False
         for s,t in tqdm(edges):
             G.add_edge(s,t)
             update(s,t)
@@ -102,6 +106,12 @@ def cycle_detection(edges, baseline=False, progress=True, prob=True):
                     obj, element = logs.pop()
                     obj.remove(element)
                 G.remove_edge(s,t)
+            elif not dense:
+                for degree in [G.degree(s), G.degree(t)]:
+                    if degree > deg_threshold:
+                        print('warning: too dense')
+                        dense = True
+                
         
     if not nx.is_directed_acyclic_graph(G):
         print('fail to pass: not a DAG finally')
