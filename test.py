@@ -5,16 +5,27 @@ import networkx as nx
 import random
 
 
+class counting:
+    def __init__(self):
+        self.count = 0
+
+def process_G(G, edge, id_node, storage):
+    s,t = edge
+    s,t = id_node[s], id_node[t]
+    storage.count += 1
+    print('cycle detected when adding edge {} -> {}'.format(s,t))
+    return G
+
+
 def test(edges, baseline, title, prob=True):
     start_time = time.time()
     count = 0
-    for G, edge, id_node in cycle_detection(edges, baseline=baseline, prob=prob):
-        count += 1
-        s,t = edge
-        s,t = id_node[s], id_node[t]
-        print('cycle detected when adding edge {} -> {}'.format(s,t))
+    
+    cycle_detection(edges, process_G, counting(), baseline=baseline, prob=prob)
+        
     end_time = time.time()
     print('\n{} method \n time used: {}s \n {} cycle detected'.format(title, int(end_time-start_time), count))
+
 
 if __name__ == '__main__':
     N = int(sys.argv[1])

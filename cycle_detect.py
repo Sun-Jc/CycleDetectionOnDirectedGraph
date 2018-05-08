@@ -6,7 +6,7 @@ from tqdm import tqdm as tqdm_no_notebook
 from tqdm import tqdm_notebook
 
 
-def cycle_detection(edges, baseline=False, progress=True, prob=True):
+def cycle_detection(edges, process_G, storage, baseline=False, progress=True, prob=True):
 
     tqdm = tqdm_notebook if 'ipykernel' in sys.modules else tqdm_no_notebook
     if not progress:
@@ -92,15 +92,16 @@ def cycle_detection(edges, baseline=False, progress=True, prob=True):
         for s,t in tqdm(edges):
             G.add_edge(s,t)
             if not nx.is_directed_acyclic_graph(G):
-                yield G, (s,t), id_node
-                G.remove_edge(s,t)
+                G = process_G(G, (s,t), id_node, storage)
+                #yield G, (s,t), id_node
     else:
         dense = False
         for s,t in tqdm(edges):
             G.add_edge(s,t)
             update(s,t)
             if not check(s,t):
-                yield G, (s,t), id_node
+                #yield G, (s,t), id_node
+                G = process_G(G, (s,t), id_node, storage)
                 # rollback
                 while len(logs) > 0:
                     obj, element = logs.pop()
